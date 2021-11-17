@@ -15,10 +15,10 @@
 
 double get_approximation_error(double *approximation, double *reference, int N);
 
-void estimate_schemes(int A, double *approximation_cache,
+void estimate_schemes(double A, double *approximation_cache,
 	double *reference_cache, double errors_table[4][6]);
 
-void estimate_schemes_with_mesh_count(int A, int N,
+void estimate_schemes_with_mesh_count(double A, int N,
 	double *approximation_cache, double *reference_cache,
 	double *errors_buffer);
 
@@ -67,7 +67,7 @@ int main(void) {
 	return 0;
 }
 
-void estimate_schemes_with_mesh_size(double A, int N,
+void estimate_schemes_with_mesh_count(double A, int N,
 	double *approximation_cache, double *reference_cache,
 	double *errors_buffer) {
 	compute_reference(reference_cache, N, A);
@@ -97,16 +97,16 @@ void estimate_schemes_with_mesh_size(double A, int N,
 							reference_cache, N);
 }
 
-void estimate_schemes(int A, double *approximation_cache,
+void estimate_schemes(double A, double *approximation_cache,
 	double *reference_cache, double errors_table[4][6]) {
 
-	estimate_schemes_with_mesh_size(A, MESH_COUNT_1, approximation_cache,
+	estimate_schemes_with_mesh_count(A, MESH_COUNT_1, approximation_cache,
 		reference_cache, errors_table[0]);
-	estimate_schemes_with_mesh_size(A, MESH_COUNT_2, approximation_cache,
+	estimate_schemes_with_mesh_count(A, MESH_COUNT_2, approximation_cache,
 		reference_cache, errors_table[1]);
-	estimate_schemes_with_mesh_size(A, MESH_COUNT_3, approximation_cache,
+	estimate_schemes_with_mesh_count(A, MESH_COUNT_3, approximation_cache,
 		reference_cache, errors_table[2]);
-	estimate_schemes_with_mesh_size(A, MESH_COUNT_6, approximation_cache,
+	estimate_schemes_with_mesh_count(A, MESH_COUNT_6, approximation_cache,
 		reference_cache, errors_table[3]);
 }
 
