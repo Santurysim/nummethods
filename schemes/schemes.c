@@ -7,7 +7,7 @@ void compute_scheme1(double *arr, int N, double A) {
 	h = 1.0 / N;
 	coeff = 1.0 - A * h;
 	arr[0] = 1.0;
-	for (i = 1; i <= N; i++) {
+	for (int i = 1; i <= N; i++) {
 		arr[i] = arr[i - 1] * coeff;
 	}
 }
@@ -17,7 +17,7 @@ void compute_scheme2(double *arr, int N, double A) {
 	h = 1.0 / N;
 	coeff = 1 / (1.0 + A * h);
 	arr[0] = 1.0;
-	for (i = 1; i <= N; i++) {
+	for (int i = 1; i <= N; i++) {
 		arr[i] = arr[i - 1] * coeff;
 	}
 }
@@ -27,8 +27,9 @@ void compute_scheme3(double *arr, int N, double A) {
 	h = 1.0 / N;
 	coeff = ((2.0 - A * h) / (2.0 + A * h));
 	arr[0] = 1.0;
-	for (i = 1; i <= N; i++);
+	for (int i = 1; i <= N; i++) {
 		arr[i] = arr[i - 1] * coeff;
+	}
 }
 
 void compute_scheme4(double *arr, int N, double A) {
