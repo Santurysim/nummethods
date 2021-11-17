@@ -1,13 +1,13 @@
-SRCS = schemes.c
-OBJS = schemes.o
+SRCS = schemes.c main.c
+OBJS = schemes.o main.o
 LDFLAGS ?= -lm
 CFLAGS ?=
 CC = gcc
 
 all: a.out
 
-schemes.o: $(SRCS)
-	$(CC) $(CFLAGS) -c $(SRCS) -o schemes.o
+%.o: %.c
+	$(CC) $(CFLAGS) -c $^ -o $@
 
 a.out: $(OBJS)
 	$(CC) $(OBJS) $(LDFLAGS)

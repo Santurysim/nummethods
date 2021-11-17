@@ -67,7 +67,7 @@ void compute_scheme6(double *arr, int N, double A) {
 	}
 }
 
-void compute_original(double *arr, int N, double A) {
+void compute_reference(double *arr, int N, double A) {
 	for (int i = 0; i <= N; i++) {
 		arr[i] = exp(-A * ((double)i / (double)N));
 	}
