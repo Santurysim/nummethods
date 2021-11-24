@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <math.h>
 
+#ifdef ENABLE_FPE
+#include <fenv.h>
+#endif
+
 #include "schemes.h"
 
 #define MESH_COUNT_1 10
@@ -26,6 +30,9 @@ const double PARAMETERS[] = {1.0, 10.0, 1000.0};
 const int APPROXIMATION_ORDERS[] = {1, 1, 2, 2, 2, 2};
 
 int main(void) {
+#ifdef ENABLE_FPE
+	feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW | FE_UNDERFLOW);
+#endif
 	double *approximation_cache, *reference_cache;
 	double errors[4][6];
 

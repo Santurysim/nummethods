@@ -6,7 +6,7 @@ CC = gcc
 
 all: a.out
 
-%.o: %.c
+%.o: %.c shemes.h
 	$(CC) $(CFLAGS) -c $^ -o $@
 
 a.out: $(OBJS)
