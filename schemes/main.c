@@ -23,13 +23,14 @@ void estimate_schemes_with_mesh_count(double A, int N,
 	double *errors_buffer);
 
 const double PARAMETERS[] = {1.0, 10.0, 1000.0};
-const int APPROXIMATION_ORDERS[] = {0, 0, 0, 0, 0, 0}; // TODO
+const int APPROXIMATION_ORDERS[] = {1, 1, 2, 2, 2, 2};
 
 int main(void) {
 	double *approximation_cache, *reference_cache;
 	double errors[4][6];
 
-	approximation_cache = (double*)malloc((MESH_COUNT_MAX + 1) * sizeof(double));
+	approximation_cache = (double*)malloc((MESH_COUNT_MAX + 1) *
+		sizeof(double));
 	if (!approximation_cache) {
 		return 1;
 	}
@@ -46,7 +47,6 @@ int main(void) {
 	puts("c c c c c c c.");
 
 	puts("No\tE1\tE2\tE3\tE6\tm\tA");
-	// puts("-");
 	
 	/* tbl data */
 	for (int i = 0; i < 3; i++) {
