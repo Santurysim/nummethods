@@ -15,9 +15,9 @@ extern double f1(double x, double *y, int n);
 extern double f2(double x, double *y, int n);
 extern double f3(double x, double *y, int n);
 
-extern double ref1(double x);
-extern double ref2(double x);
-extern double ref3(double x);
+extern ref1(double x, double *f, int n);
+extern ref2(double x, double *f, int n);
+extern ref3(double x, double *f, int n);
 
 double dist(double*, double*, int N);
 
@@ -29,7 +29,8 @@ void adams_moulton_step(function_t *func, double *solution, double *tmp,
 
 int main(int argc, char **argv) {
 	int order, N, result;
-	double *approximation, *approximation2;
+	double *approximation_last, *approximation2_last;
+	double *tmp;
 	double *reference;
 	order = 3;
 
@@ -42,21 +43,21 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	approximation = malloc((long long)N * order * sizeof(double));
-	if(!approximation) {
+	approximation_last = (double*)malloc(4ll * order * sizeof(double));
+	if(!approximation_last) {
 		return 1;
 	}
 
-	approximation2 = malloc((long long) 2 * N * order * sizeof(double));
-	if(!approximation2) {
-		free(approximation1);
+	approximation2_last = (double*)malloc(8ll * order * sizeof(double));
+	if(!approximation2_last) {
+		free(approximation1_last);
 		return 1;
 	}
 
 	// Do things;
 	
-	free(approximation);
-	free(approximation2);
+	free(approximation_last);
+	free(approximation2_last);
 	return 0;
 }
 
