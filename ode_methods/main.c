@@ -19,7 +19,7 @@ extern double ref1(double x);
 extern double ref2(double x);
 extern double ref3(double x);
 
-double dist(double*, double*, int N);
+double dist(double *x, double *y, int N);
 
 void adams_moulton_step(function_t *func, double *solution, double *tmp,
 	int order, int N, int k);
@@ -29,7 +29,7 @@ void shift(double *array, int n, int m);
 int main(int argc, char **argv) {
 	int order, N, result;
 	double *approximation_last, *approximation2_last, *tmp;
-	double h;
+	double h, runge_coeff;
 	double *reference;
 	function_t FUNCTIONS[3] = {f1, f2, f3};
 	order = 3;
@@ -57,12 +57,32 @@ int main(int argc, char **argv) {
 
 	// TODO Initial conditions in 3 points
 	for(int i = 0; i < 3; i++) {
-		approximation_last[i * order] = ref1((double)i * h);
-		approximation_last[i * order + 1] = ref2((double)i * h);
-		approximation_last[i * order + 2] = ref3((double)i * h);
+		approximation_last[i * order] = ref1(i * h);
+		approximation_last[i * order + 1] = ref2(i * h);
+		approximation_last[i * order + 2] = ref3(i * h);
 
-		approximation2_last[
+		approximation2_last[i * order] = ref1(i * h / 2.0);
+		approximation2_last[i * order + 1] = ref2(i * h / 2.0);
+		approximation2_last[i * order + 2] = ref3(i * h / 2.0);
 	}
+
+	runge_coeff = dist(approximation_last, approximation2_last, order) / 15.0;
+	//printf
+	
+	runge_coeff = dist(approximation_last + order,
+		approximation2_last + 2 * order, order) / 15.0;
+	//printf
+	
+	//shift(approximation2_last, 4, order);
+	adams_moulton_step(FUNCTIONS, approximation2_last, tmp, order, 2 * N, 3);
+	shift(approximation2_last, 4, order);
+	adams_moulton_step(FUNCTIONS, approximation2_last, tmp, order, 2 * N, 4);
+
+	runge_coeff = dist(approximation_last + 2 * order,
+		approximation_2_last + 3 * order, order) / 15.0;
+	//printf
+	
+	for(int i = 
 	
 	free(approximation_last);
 	free(approximation2_last);
