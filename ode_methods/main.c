@@ -55,6 +55,8 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
+	tmp = (double*)malloc(1ll * order * sizeof(double));
+
 	// TODO Initial conditions in 3 points
 	for(int i = 0; i < 3; i++) {
 		approximation_last[i * order] = ref1(i * h);
@@ -82,8 +84,20 @@ int main(int argc, char **argv) {
 		approximation_2_last + 3 * order, order) / 15.0;
 	//printf
 	
-	for(int i = 
+	for(int i = 3; i <= N; i++) {
+		shift(apprioximation_last, 4, order);
+		adams_moulton_step(FUNCTIONS, approximation_last, tmp, order, N, i);
+
+		//two steps for approximation2
+		adams_moulton_step(FUNCTIONS, approximation2_last, tmp, order, 2 * N,
+			2 * i - 1);
+		shift(approximation2_last, 4, order);
+		adams_moulton_step(FUNCTIONS, approximation2_last, tmp, order, 2 * N,
+			2 * i);
+		// printf
+	}
 	
+	free(tmp);
 	free(approximation_last);
 	free(approximation2_last);
 	return 0;
