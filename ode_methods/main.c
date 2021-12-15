@@ -27,19 +27,12 @@ void adams_moulton_step(function_t *func, double *solution, double *tmp,
 void shift(double *array, int n, int m);
 
 void print_line(double x, double *y, int order, double error,
-	double runge_error) {
-	printf("%lf ", x);
-	for(int i = 0; i < order; i++) {
-		printf("%lf ", y[i]);
-	}
-	printf("%lf %lf\n", error, runge_error);
-}
+	double runge_error);
 
 int main(int argc, char **argv) {
 	int order, N, result;
 	double *approximation_last, *approximation2_last, *tmp;
 	double h, runge_coeff, error;
-	double *reference;
 	function_t FUNCTIONS[3] = {f1, f2, f3};
 	order = 3;
 
@@ -54,18 +47,18 @@ int main(int argc, char **argv) {
 	}
 	h = 1.0 / N;
 
-	approximation_last = (double*)malloc(4ll * order * sizeof(double));
+	approximation_last = (double*)malloc(4ull * order * sizeof(double));
 	if(!approximation_last) {
 		return 1;
 	}
 
-	approximation2_last = (double*)malloc(4ll * order * sizeof(double));
+	approximation2_last = (double*)malloc(4ull * order * sizeof(double));
 	if(!approximation2_last) {
 		free(approximation_last);
 		return 1;
 	}
 
-	tmp = (double*)malloc(1ll * order * sizeof(double));
+	tmp = (double*)malloc(1ull * order * sizeof(double));
 	if(!tmp) {
 		free(approximation_last);
 		free(approximation2_last);
@@ -125,6 +118,15 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
+void print_line(double x, double *y, int order, double error,
+	double runge_error) {
+	printf("%lf ", x);
+	for(int i = 0; i < order; i++) {
+		printf("%lf ", y[i]);
+	}
+	printf("%lf %lf\n", error, runge_error);
+}
+
 void adams_moulton_step(function_t *func, double *solution, double *new_val,
 		int order, int N, int k) {
 	double difference, h;
@@ -132,7 +134,8 @@ void adams_moulton_step(function_t *func, double *solution, double *new_val,
 	h = 1.0 / N;
 
 	// Initial value - value at previous point
-	memcpy(solution + 3 * order, solution + 2 * order, order * sizeof(double));
+	memcpy(solution + 3 * order, solution + 2 * order, (unsigned long)order
+		* sizeof(double));
 
 	for(;;) {
 		// Obtain new vector for y_k
@@ -145,7 +148,8 @@ void adams_moulton_step(function_t *func, double *solution, double *new_val,
 			new_val[i] += solution[2 * order + i];
 		}
 		difference = dist(solution + 3 * order, new_val, order);
-		memcpy(solution + 3 * order, new_val, order * sizeof(double));
+		memcpy(solution + 3 * order, new_val, (unsigned long)order
+			* sizeof(double));
 		if(difference < EPS) break;
 //		printf("%e\n", difference);
 	}
@@ -153,7 +157,8 @@ void adams_moulton_step(function_t *func, double *solution, double *new_val,
 
 void shift(double *array, int n, int m) {
 	for(int i = 0; i < n - 1; i++) {
-		memcpy(array + i * m, array + (i + 1) * m, m * sizeof(double)); 
+		memcpy(array + i * m, array + (i + 1) * m,
+			(unsigned long)m * sizeof(double)); 
 	}
 }
 
