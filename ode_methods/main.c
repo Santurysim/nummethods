@@ -99,9 +99,9 @@ int main(int argc, char **argv) {
 		adams_moulton_step(FUNCTIONS, approximation_last, tmp, order, N, i);
 
 		tmp[0] = ref1(i * h);
-		tmp[1] = ref1(i * h);
-		tmp[2] = ref1(i * h);
-		error = dist(approximation_last, tmp, order);
+		tmp[1] = ref2(i * h);
+		tmp[2] = ref3(i * h);
+		error = dist(approximation_last + 3 * order, tmp, order);
 
 		shift(approximation_last, 4, order);
 		//two steps for approximation2
@@ -132,7 +132,7 @@ void adams_moulton_step(function_t *func, double *solution, double *new_val,
 	h = 1.0 / N;
 
 	// Initial value - value at previous point
-	memcpy(solution + 3 * order, solution + 2 * order, order);
+	memcpy(solution + 3 * order, solution + 2 * order, order * sizeof(double));
 
 	for(;;) {
 		// Obtain new vector for y_k
