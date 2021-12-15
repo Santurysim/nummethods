@@ -30,7 +30,7 @@ void print_line(double x, double *y, int order, double error,
 	double runge_error);
 
 int main(int argc, char **argv) {
-	int order, N, result;
+	int N, result, order;
 	double *approximation_last, *approximation2_last, *tmp;
 	double h, runge_coeff, error;
 	function_t FUNCTIONS[3] = {f1, f2, f3};
@@ -47,18 +47,20 @@ int main(int argc, char **argv) {
 	}
 	h = 1.0 / N;
 
-	approximation_last = (double*)malloc(4ull * order * sizeof(double));
+	approximation_last = (double*)malloc(4 * (unsigned int)order
+		* sizeof(double));
 	if(!approximation_last) {
 		return 1;
 	}
 
-	approximation2_last = (double*)malloc(4ull * order * sizeof(double));
+	approximation2_last = (double*)malloc(4 * (unsigned int)order
+		* sizeof(double));
 	if(!approximation2_last) {
 		free(approximation_last);
 		return 1;
 	}
 
-	tmp = (double*)malloc(1ull * order * sizeof(double));
+	tmp = (double*)malloc((unsigned int)order * sizeof(double));
 	if(!tmp) {
 		free(approximation_last);
 		free(approximation2_last);
