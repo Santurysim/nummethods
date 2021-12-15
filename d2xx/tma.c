@@ -3,6 +3,8 @@
 #include <math.h>
 #include <string.h>
 
+#define SQUARE(x) ((x)*(x))
+
 double f(double);
 
 double b(double);
@@ -62,7 +64,7 @@ int main(int argc, char **argv) {
 
 	error = 0.0;
 	for(int i = 0; i < N - 1; i++)
-		error += solution[i] * reference((i + 1) * h);
+		error += SQUARE(solution[i] - reference((i + 1) * h));
 	error *= h;
 	error = sqrt(error);
 
