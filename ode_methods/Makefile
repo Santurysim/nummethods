@@ -1,5 +1,5 @@
 SRCS = main.c
-OBJS = main.o
+OBJS = main.o functions.o
 LDFLAGS ?= -lm
 CFLAGS ?=
 CC = gcc
