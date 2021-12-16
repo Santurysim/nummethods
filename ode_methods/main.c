@@ -71,24 +71,11 @@ int main(int argc, char **argv) {
 		approximation_last[i * order] = ref1(i * h);
 		approximation_last[i * order + 1] = ref2(i * h);
 		approximation_last[i * order + 2] = ref3(i * h);
-
-		approximation2_last[i * order] = ref1(i * h / 2.0);
-		approximation2_last[i * order + 1] = ref2(i * h / 2.0);
-		approximation2_last[i * order + 2] = ref3(i * h / 2.0);
 	}
 
 	print_line(0.0, approximation_last, order, 0.0, 0.0);
 	print_line(h, approximation_last + order, order, 0.0, 0.0);
-	
-	// perform 2 steps for h / 2 step size to get on par with h
-	adams_moulton_step(FUNCTIONS, approximation2_last, tmp, order, 2 * N, 3);
-	shift(approximation2_last, 4, order);
-	adams_moulton_step(FUNCTIONS, approximation2_last, tmp, order, 2 * N, 4);
-
-	runge_coeff = dist(approximation_last + 2 * order,
-		approximation2_last + 3 * order, order) / 15.0;
-	print_line(2 * h, approximation_last + 2 * order, order, 0.0,
-		runge_coeff * h * h * h * h);
+	print_line(2 * h, approximation_last + 2 * order, order, 0.0, 0.0);
 	
 	for(int i = 3; i <= N; i++) {
 		adams_moulton_step(FUNCTIONS, approximation_last, tmp, order, N, i);
@@ -98,8 +85,11 @@ int main(int argc, char **argv) {
 		tmp[2] = ref3(i * h);
 		error = dist(approximation_last + 3 * order, tmp, order);
 
-		shift(approximation_last, 4, order);
 		//two steps for approximation2
+		
+		memcpy(approximation2_last, approximation_last,
+			3 * (unsigned long)order * sizeof(double));
+
 		adams_moulton_step(FUNCTIONS, approximation2_last, tmp, order, 2 * N,
 			2 * i - 1);
 		shift(approximation2_last, 4, order);
@@ -109,6 +99,8 @@ int main(int argc, char **argv) {
 		// runge coefficient
 		runge_coeff = dist(approximation_last + 3 * order,
 			approximation2_last + 3 * order, order) / 15.0;
+
+		shift(approximation_last, 4, order);
 
 		print_line(i * h, approximation_last + 3 * order, order, error,
 			runge_coeff * h * h * h * h);
@@ -126,7 +118,7 @@ void print_line(double x, double *y, int order, double error,
 	for(int i = 0; i < order; i++) {
 		printf("%lf ", y[i]);
 	}
-	printf("%lf %lf\n", error, runge_error);
+	printf("%e %e\n", error, runge_error);
 }
 
 void adams_moulton_step(function_t *func, double *solution, double *new_val,
