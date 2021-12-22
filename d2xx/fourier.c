@@ -34,11 +34,11 @@ int main(int argc, char **argv) {
 		return 1;
 	h = 2.0 / (2 * N - 1);
 
-	solution = (double*)malloc((N - 1) * sizeof(double));
+	solution = (double*)malloc((unsigned long)(N - 1) * sizeof(double));
 	if(!solution)
 		return 1;
 
-	solution_coords = (double*)malloc((N - 1) * sizeof(double));
+	solution_coords = (double*)malloc((unsigned long)(N - 1) * sizeof(double));
 	if(!solution_coords) {
 		free(solution);
 		return 1;
