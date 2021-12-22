@@ -75,7 +75,7 @@ double dot_product_with_eigenvector(function_t func, int n, int N) {
 	double h = 1.0 / N;
 	double result = 0.0;
 	for(int i = 1; i < N; i++) {
-		result += f(i * h) * eigenvector(n, i, h);
+		result += func(i * h) * eigenvector(n, i, h);
 	}
 	result *= h;
 	return result;
