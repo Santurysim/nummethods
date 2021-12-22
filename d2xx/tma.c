@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	solution = (double*)malloc((long unsigned)(N - 1) * sizeof(double*));
+	solution = (double*)malloc((long unsigned)(N - 2) * sizeof(double*));
 	if(!solution) {
 		free(alpha);
 		free(beta);
@@ -47,23 +47,19 @@ int main(int argc, char **argv) {
 	alpha[0] = 1.0 / (2.0 + b(h) * h * h);
 	beta[0] = (f(h) * h * h) / (2.0 + b(h) * h * h);
 
-	for(int i = 1; i < N - 2; i++) {
-		double denominator = (2.0 + b((i + 1) * h) * h * h - alpha[i - 1]);
-		alpha[i] = 1.0 / denominator;
-		beta[i] = (f((i + 1) * h) * h * h + beta[i - 1]) / denominator;
+	for(int i = 0; i < N - 3; i++) {
+		double denominator = (2.0 + b((i + 2) * h) * h * h - alpha[i]);
+		alpha[i + 1] = 1.0 / denominator;
+		beta[i + 1] = (f((i + 2) * h) * h * h + beta[i]) / denominator;
 	}
 
-	alpha[N - 2] = 1.0 / (3.0 + b((N - 1) * h) * h * h - alpha[N - 3]);
-	beta[N - 2] = (f((N - 1) * h) * h * h + beta[N - 3])
-	   / (3.0 + b((N - 1) * h) * h * h - alpha[N - 3]);
-
 	// Obtain solution
-	solution[N - 2] = (f((N - 1) * h) * h * h + beta[N - 2])
-		/ (3 + b((N - 1) * h) * h * h - alpha[N - 2]);
+	solution[N - 2] = (f((N - 1) * h) * h * h + beta[N - 3])
+		/ (3 + b((N - 1) * h) * h * h - alpha[N - 3]);
 
 	for(int i = 0; i < N - 2; i++) {
-		solution[N - 3 - i] = alpha[N - 2 - i] * solution[N - 2 - i]
-			+ beta[N - 2 - i];
+		solution[N - i - 3] = alpha[N - i - 3] * solution[N - i - 2]
+			+ beta[N - i - 3];
 	}
 
 	error = 0.0;
