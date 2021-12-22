@@ -74,9 +74,9 @@ int main(int argc, char **argv) {
 
 	printf("%e\n", error);
 
-	for(int i = 0; i < N - 1; i++) {
-		printf("%e\n", solution[i]);
-	}
+//	for(int i = 0; i < N - 1; i++) {
+//		printf("%e\n", solution[i]);
+//	}
 
 	free(alpha);
 	free(beta);
