@@ -5,10 +5,10 @@ CC = gcc
 all: tma fourier
 
 tma: tma.o
-	$(CC) tma.o $(LDFLAGS)
+	$(CC) tma.o -o tma $(LDFLAGS)
 
 fourier: fourier.o
-	$(CC) fourier.o $(LDFLAGS)
+	$(CC) fourier.o -o fourier $(LDFLAGS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $^ -o $@

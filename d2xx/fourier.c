@@ -11,7 +11,7 @@ double f(double);
 
 double reference(double);
 
-const double b = -1.0;
+const double b = -2.0;
 
 double eigenvector(int n, int k, double h);
 double eigenvalue(int n, double h, int N); // N to reduce error
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 
 	for(int i = 0; i < N - 1; i++)
 		solution_coords[i] = dot_product_with_eigenvector(f, i + 1, N)
-			/ eigenvalue(i + 1, h, N);
+			/ (eigenvalue(i + 1, h, N) + b);
 
 	for(int i = 0; i < N - 1; i++) {
 		solution[i] = 0.0;
@@ -65,4 +65,30 @@ int main(int argc, char **argv) {
 	free(solution);
 	free(solution_coords);
 	return 0;
+}
+
+double eigenvector(int n, int k, double h) {
+	return sin(M_PI * n * k * h) * sqrt(2);
+}
+
+double dot_product_with_eigenvector(function_t func, int n, int N) {
+	double h = 1.0 / N;
+	double result = 0.0;
+	for(int i = 1; i < N; i++) {
+		result += f(i * h) * eigenvector(n, i, h);
+	}
+	result *= h;
+	return result;
+}
+
+double eigenvalue(int n, double h, int N) {
+	return SQUARE(sin(M_PI * n * h / 2)) * SQUARE(2 * N - 1);
+}
+
+double f(double x) {
+	return 2 * M_PI * M_PI * (cos(M_PI * x) - sin(M_PI * x));
+}
+
+double reference(double x) {
+	return exp(M_PI * x) * sin(M_PI * x);
 }

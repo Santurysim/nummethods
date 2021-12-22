@@ -75,3 +75,16 @@ int main(int argc, char **argv) {
 	free(solution);
 	return 0;
 }
+
+double f(double x) {
+	return 2.0 * M_PI * M_PI * exp(M_PI * x) * cos(M_PI * x)
+		* (sin(M_PI * x) - 1);
+}
+
+double b(double x) {
+	return 2.0 * M_PI * M_PI * cos(M_PI * x);
+}
+
+double reference(double x) {
+	return exp(M_PI * x) * sin(M_PI * x);
+}
