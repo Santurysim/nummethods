@@ -44,18 +44,22 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	alpha[0] = 2.0 - b(h) * h * h;
-	beta[0] = (f(h) * h * h) / (b(h) * h * h - 2.0);
+	alpha[0] = 1.0 / (2.0 + b(h) * h * h);
+	beta[0] = (f(h) * h * h) / (2.0 + b(h) * h * h);
 
-	for(int i = 1; i < N - 1; i++) {
-		double denominator = (2.0 - b((i + 1) * h) * h * h - alpha[i - 1]);
+	for(int i = 1; i < N - 2; i++) {
+		double denominator = (2.0 + b((i + 1) * h) * h * h - alpha[i - 1]);
 		alpha[i] = 1.0 / denominator;
-		beta[i] = (-f((i + 1) * h) * h * h + beta[i - 1]) / denominator;
+		beta[i] = (f((i + 1) * h) * h * h + beta[i - 1]) / denominator;
 	}
 
+	alpha[N - 2] = 1.0 / (3.0 + b((N - 1) * h) * h * h - alpha[N - 3]);
+	beta[N - 2] = (f((N - 1) * h) * h * h + beta[N - 3])
+	   / (3.0 + b((N - 1) * h) * h * h - alpha[N - 3]);
+
 	// Obtain solution
-	solution[N - 2] = (-f((N - 1) * h) * h * h + beta[N - 2])
-		/ (3 - b((N - 1) * h) * h * h - alpha[N - 2]);
+	solution[N - 2] = (f((N - 1) * h) * h * h + beta[N - 2])
+		/ (3 + b((N - 1) * h) * h * h - alpha[N - 2]);
 
 	for(int i = 0; i < N - 2; i++) {
 		solution[N - 3 - i] = alpha[N - 2 - i] * solution[N - 2 - i]
@@ -69,6 +73,10 @@ int main(int argc, char **argv) {
 	error = sqrt(error);
 
 	printf("%e\n", error);
+
+	for(int i = 0; i < N - 1; i++) {
+		printf("%e\n", solution[i]);
+	}
 
 	free(alpha);
 	free(beta);
