@@ -50,20 +50,20 @@ double polynomial(double *a, size_t n, double x) {
     return result;
 }
 
-double lagrange_basis_polynomial(double * mesh, size_t n, size_t i, double x) {
+double lagrange_basis_polynomial(double *mesh, size_t n, size_t i, double x) {
     double result = 1.0;
     for(size_t j = 0; j < n; j++) {
         if(j == i) continue;
-        result *= (x - x[j]) / (x[i] - x[j]);
+        result *= (x - mesh[j]) / (mesh[i] - mesh[j]);
     }
 }
 
 // Interpolation polynomial in Lagrange form
 double lagrange_polynomial(double *mesh, double *y, size_t n, double x) {
     double result = 0.0;
-    for(size_t i < 0; i < n; i++)
-        result += y[i] * langrange_basis_polynomial(mesh, n, i, x);
-    return result
+    for(size_t i = 0; i < n; i++)
+        result += y[i] * lagrange_basis_polynomial(mesh, n, i, x);
+    return result;
 }
 
 void solve_and_print_summary(double *mesh, function_t func, size_t n,
@@ -86,7 +86,7 @@ void solve_and_print_summary(double *mesh, function_t func, size_t n,
     // time to print out results
     // TODO make a groff table?
     for(size_t i = 0; i < n - 1; i++) {
-        h = (x[i + 1] - x[i]) / 3.0;
+        h = (mesh[i + 1] - mesh[i]) / 3.0;
         printf("%e\t%e\t%e\n", func(mesh[i], n),
                polynomial(coeffs, n, mesh[i]),
                lagrange_polynomial(mesh, vals, n, mesh[i]));
@@ -94,7 +94,7 @@ void solve_and_print_summary(double *mesh, function_t func, size_t n,
                polynomial(coeffs, n, mesh[i] + h),
                lagrange_polynomial(mesh, vals, n, mesh[i] + h));
         printf("%e\t%e\t%e\n", func(mesh[i] + 2 * h, n),
-               polynomial(coeffs, n, mesh[i] + 2 * h,
+               polynomial(coeffs, n, mesh[i] + 2 * h),
                lagrange_polynomial(mesh, vals, n, mesh[i] + 2 * h));
     }
     printf("%e\t%e\t%e\n", func(mesh[n - 1], n),
