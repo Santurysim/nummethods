@@ -138,7 +138,10 @@ void generate_uniform_mesh(double *mesh, size_t n, double left, double right) {
 
 void generate_chebyshev_mesh(double *mesh, size_t n, double left,
                              double right) {
-    // TODO
+    for(size_t i = 0; i < n; i++)
+        mesh[n - 1 - i] = 0.5 * (left + right) + 0.5 * (right - left) *
+            cos(M_PI * (1.0 * 2.0 * i) / (2.0 * n));
+
 }
 
 void correctness(size_t n, double* matrix, double* mesh, double* vals,
