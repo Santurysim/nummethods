@@ -77,17 +77,18 @@ int solve_system(double *matrix, double *result, size_t order) {
     // We know that the matrix is inversible at the moment
     // Note: no action is required on matrix
 
-    for(size_t i = order - 1; i >= 0; i--) {
+    for(size_t i = 0/*order - 1*/; i < order/*>= 0*/; i++) {
         // Divide i-th row of result by matrix[i, i]
 
-        s = matrix[COORD(i, i, order)];
+        s = matrix[COORD(order - 1 - i, order - 1 - i, order)];
         result[i] /= s;
 
-        // Substract i-th element of result multiplied by matrix[k, i] from
-        // k-th element of result for k = 0, ..., i - 1
+        // Substract (order - 1 - i)-th element of result multiplied by
+        // matrix[k, order - 1 - i] from k-th element of result
+        // for k = 0, ..., order - 2 - i
         tmp = result[i];
-        for(size_t k = 0; k < i; k++) {
-            result[k] -= tmp * matrix[COORD(i, k, order)];
+        for(size_t k = 0; k < order - 1 - i; k++) {
+            result[k] -= tmp * matrix[COORD(order - 1 - i, k, order)];
         }
     }
 
