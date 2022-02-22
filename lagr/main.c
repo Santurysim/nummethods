@@ -6,6 +6,8 @@
 #include "common.h"
 #include "matrixlib.h"
 
+#define HAZARDOUS_LOWER_BOUND 1e-303
+
 typedef double (*function_t)(double, size_t);
 
 void usage(void);
@@ -102,7 +104,10 @@ void solve_and_print_summary(double *mesh, function_t func, size_t n,
 
     for(size_t i = 1; i < n; i++)
         for(size_t j = 0; j < n; j++)
-            matrix[COORD(i, j, n)] = matrix[COORD(i - 1, j, n)] * mesh[j];
+            if(fabs(matrix[COORD(i - 1, j, n)]) < HAZARDOUS_LOWER_BOUND)
+                matrix[COORD(i, j, n)] = 0.0;
+            else
+                matrix[COORD(i, j, n)] = matrix[COORD(i - 1, j, n)] * mesh[j];
 
     for(size_t i = 0; i < n; i++)
         vals[i] = coeffs[i] = func(mesh[i], n);
