@@ -6,14 +6,14 @@
 #include "common.h"
 #include "matrixlib.h"
 
-typedef double (*function_t)(double, unsigned int);
+typedef double (*function_t)(double, size_t);
 
 void usage(void);
 
-double ipow(double, unsigned int);
-double f(double, unsigned int);
-double runge_func(double, unsigned int);
-double myabs(double, unsigned int);
+double ipow(double, size_t);
+double f(double, size_t);
+double runge_func(double, size_t);
+double myabs(double, size_t);
 
 double polynomial(double*, size_t, double);
 double lagrange_basis_polynomial(double*, size_t, size_t, double);
@@ -36,7 +36,7 @@ void usage(void) {
 
 // functions for approximations
 
-double ipow(double x, unsigned int n) {
+double ipow(double x, size_t n) {
     double b = 1.0, c = x;
     while (n > 0) {
         if(n % 2) {
@@ -51,17 +51,17 @@ double ipow(double x, unsigned int n) {
     return b;
 }
 
-double f(double x, unsigned int n) {
+double f(double x, size_t n) {
     double temp = ipow(x, n - 2);
     return x * temp + 2.0 * temp + 3;
 }
 
-double runge_func(double x, unsigned int n) {
+double runge_func(double x, size_t n) {
     (void)n;
     return 1.0 / (25.0 * x * x + 1.0);
 }
 
-double myabs(double x, unsigned int n){
+double myabs(double x, size_t n){
     (void)n;
     return fabs(x);
 }
@@ -133,14 +133,14 @@ void solve_and_print_summary(double *mesh, function_t func, size_t n,
 // mesh generators
 void generate_uniform_mesh(double *mesh, size_t n, double left, double right) {
     for(size_t i = 0; i < n; i++)
-        mesh[i] = left + ((right - left) * i) / n;
+        mesh[i] = left + ((right - left) * (double)i) / (double)n;
 }
 
 void generate_chebyshev_mesh(double *mesh, size_t n, double left,
                              double right) {
     for(size_t i = 0; i < n; i++)
         mesh[n - 1 - i] = 0.5 * (left + right) + 0.5 * (right - left) *
-            cos(M_PI * (1.0 * 2.0 * i) / (2.0 * n));
+            cos(M_PI * (1.0 * 2.0 * (double)i) / (2.0 * (double)n));
 
 }
 

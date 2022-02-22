@@ -16,4 +16,4 @@
 
 #pragma once
 
-int solve_system(double *matrix, double *result, int order);
+int solve_system(double *matrix, double *result, size_t order);

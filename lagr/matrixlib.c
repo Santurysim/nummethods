@@ -20,13 +20,13 @@
 #include "matrixlib.h"
 #include "common.h"
 
-int solve_system(double *matrix, double *result, int order) {
+int solve_system(double *matrix, double *result, size_t order) {
     double s, norm1, norm2_square, tmp;
 
     // Cast the matrix to upper triangular type
-    for(int i = 0; i < order; i++) {
+    for(size_t i = 0; i < order; i++) {
         s = 0.0;
-        for(int j = i + 1; j < order; j++){
+        for(size_t j = i + 1; j < order; j++){
             s += SQUARE(matrix[COORD(i, j, order)]);
         }
 
@@ -47,25 +47,25 @@ int solve_system(double *matrix, double *result, int order) {
 
         // Vector of reflection is ready, now we need to operate on matrices
 
-        for(int j = i + 1; j < order; j++) {
+        for(size_t j = i + 1; j < order; j++) {
             s = 0.0;
-            for(int k = i; k < order; k++) {
+            for(size_t k = i; k < order; k++) {
                 s += matrix[COORD(i, k, order)] * matrix[COORD(j, k, order)];
             }
 
             s *= norm2_square;
-            for(int k = i; k < order; k++) {
+            for(size_t k = i; k < order; k++) {
                 matrix[COORD(j, k, order)] -= s * matrix[COORD(i, k, order)];
             }
         }
 
         s = 0.0;
-        for(int k = i; k < order; k++) {
+        for(size_t k = i; k < order; k++) {
             s += matrix[COORD(i, k, order)] * result[k];
         }
 
         s *= norm2_square;
-        for(int k = i; k < order; k++) {
+        for(size_t k = i; k < order; k++) {
             result[k] -= s * matrix[COORD(i, k, order)];
         }
 
@@ -77,7 +77,7 @@ int solve_system(double *matrix, double *result, int order) {
     // We know that the matrix is inversible at the moment
     // Note: no action is required on matrix
 
-    for(int i = order - 1; i >= 0; i--) {
+    for(size_t i = order - 1; i >= 0; i--) {
         // Divide i-th row of result by matrix[i, i]
 
         s = matrix[COORD(i, i, order)];
@@ -86,7 +86,7 @@ int solve_system(double *matrix, double *result, int order) {
         // Substract i-th element of result multiplied by matrix[k, i] from
         // k-th element of result for k = 0, ..., i - 1
         tmp = result[i];
-        for(int k = 0; k < i; k++) {
+        for(size_t k = 0; k < i; k++) {
             result[k] -= tmp * matrix[COORD(i, k, order)];
         }
     }
