@@ -81,12 +81,12 @@ int solve_system(double *matrix, double *result, size_t order) {
         // Divide i-th row of result by matrix[i, i]
 
         s = matrix[COORD(order - 1 - i, order - 1 - i, order)];
-        result[i] /= s;
+        result[order - 1 - i] /= s;
 
         // Substract (order - 1 - i)-th element of result multiplied by
         // matrix[k, order - 1 - i] from k-th element of result
         // for k = 0, ..., order - 2 - i
-        tmp = result[i];
+        tmp = result[order - 1 - i];
         for(size_t k = 0; k < order - 1 - i; k++) {
             result[k] -= tmp * matrix[COORD(order - 1 - i, k, order)];
         }

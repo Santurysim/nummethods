@@ -138,7 +138,7 @@ void solve_and_print_summary(double *mesh, function_t func, size_t n,
 // mesh generators
 void generate_uniform_mesh(double *mesh, size_t n, double left, double right) {
     for(size_t i = 0; i < n; i++)
-        mesh[i] = left + ((right - left) * (double)i) / (double)n;
+        mesh[i] = left + ((right - left) * (double)i) / (double)(n - 1);
 }
 
 void generate_chebyshev_mesh(double *mesh, size_t n, double left,
