@@ -20,18 +20,20 @@
 #include "matrixlib.h"
 #include "common.h"
 
-int qr_decompose(double *matrix, double *result, size_t *map, size_t n,
-                 size_t m)
+int qr_decompose(double *matrix, double *y, size_t *map, size_t n, size_t m)
 {
     double s, norm1, norm2_square, tmp;
     size_t j1;
 
+	for(size_t i = 0; i < m; i++)
+		map[i] = i;
+
     for (size_t i = 0; i < MIN(n, m); i++) {
         j1 = i;
         norm1 = 0.0;
-        for (size_t j = i; j < n; j++) {
+        for (size_t j = i; j < m; j++) {
             s = 0.0;
-            for (size_t k = i; k < m; k++)
+            for (size_t k = i; k < n; k++)
                 s += SQUARE(matrix[COORD(j, k, n)]);
             if (norm1 > s) {
                 j1 = j;
@@ -53,7 +55,7 @@ int qr_decompose(double *matrix, double *result, size_t *map, size_t n,
         norm1 = sqrt(norm1);
 
         if (norm1 < EPS) {
-            return 1; // non-invertible matrix
+            return -1; // non-invertible matrix TODO
         }
 
         if (s < EPS) {
@@ -81,21 +83,23 @@ int qr_decompose(double *matrix, double *result, size_t *map, size_t n,
 
         s = 0.0;
         for (size_t k = i; k < n; k++) {
-            s += matrix[COORD(i, k, n)] * result[k];
+            s += matrix[COORD(i, k, n)] * y[k];
         }
 
         s *= norm2_square;
         for (size_t k = i; k < n; k++) {
-            result[k] -= s * matrix[COORD(i, k, n)];
+            y[k] -= s * matrix[COORD(i, k, n)];
         }
 
         // Finalize: set the i-th subcolumn of matrix
         matrix[COORD(i, i, n)] = norm1;
     }
+
     return 0;
 }
 
-void gauss_back_substitute(double *matrix, double *result, size_t n, size_t m)
+void gauss_back_substitute(double *matrix, double *x, double *y, size_t n,
+						   size_t m)
 {
     double s, tmp;
     for (size_t i = 0; i < n; i++) {

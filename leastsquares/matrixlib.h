@@ -16,10 +16,10 @@
 
 #pragma once
 
-int solve_system(double *matrix, double *result, size_t *map, size_t n,
+int solve_system(double *matrix, double *x, double *y, size_t *map, size_t n,
                  size_t m);
 
-int qr_decompose(double *matrix, double *result, size_t *map, size_t n,
-                 size_t m);
+int qr_decompose(double *matrix, double *y, size_t *map, size_t n, size_t m);
 
-void gauss_back_substitute(double *matrix, double *result, size_t n, size_t m);
+void gauss_back_substitute(double *matrix, double *x, double *y, size_t n,
+						   size_t m);
