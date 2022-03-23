@@ -26,4 +26,4 @@
 
 #define SQUARE(a) (a) * (a)
 
-#define EPS 1e-16
+#define EPS 1e-20
