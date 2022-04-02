@@ -56,6 +56,11 @@ double F(double x)
     return x * sin(M_PI * x);
 }
 
+double runge(double x)
+{
+    return 1.0 / (1.0 + 25.0 * x * x);
+}
+
 void generate_matrix(double *matrix, double *x, size_t n, size_t N,
                      basis_t phi)
 {
@@ -178,7 +183,7 @@ int main(int argc, char **argv)
 
     fclose(in);
 
-    solve_and_print_summary(matrix, x, y, map, solution, n, N, F, sin_basis);
+    solve_and_print_summary(matrix, x, y, map, solution, n, N, runge, basis);
 
     return 0;
 }
