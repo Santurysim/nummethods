@@ -56,7 +56,7 @@ int solve_system(double *matrix, double *result, size_t order)
 
             s *= norm2_square;
             for(size_t k = i; k < order; k++) {
-                matrix[COORDT(k, j, order)] -= s * matrix[COORD(k, j, order)];
+                matrix[COORDT(k, j, order)] -= s * matrix[COORD(k, i, order)];
             }
         }
 
