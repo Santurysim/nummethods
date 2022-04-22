@@ -10,7 +10,7 @@ typedef struct point {
 
 typedef double (*function_t)(double, double);
 
-double triangle_integral(function_t func, point_t a, point_t b, point_t c);
+double triangle_integral(function_t func, point_t *a, point_t *b, point_t *c);
 
 double integral_2d(function_t func, point_t bottom, point_t top, size_t nx,
                    size_t ny);
