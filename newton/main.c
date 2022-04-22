@@ -19,15 +19,6 @@ void find_root(void (*func)(double*, double*, size_t), double *x0,
 
 double norm2(double const *x, size_t n);
 
-void print_matrix(double *matrix, size_t n) {
-    for(size_t i = 0; i < n; i++) {
-        for(size_t j = 0; j < n; j++) {
-            printf(" %10.3e", matrix[COORDT(i, j, n)]);
-        }
-        printf("\n");
-    }
-}
-
 void generate_jacobian_t(void(*func)(double*, double*, size_t), double *x,
                          double *matrix, double *temp, size_t n, double delta)
 {
