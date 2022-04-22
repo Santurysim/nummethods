@@ -7,6 +7,8 @@
 #include "common.h"
 #include "matrixlib.h"
 
+#define DANGEROUS_UPPER_BOUND 1e100
+
 void f(double *x, double *y, size_t n);
 
 void f1(double *x, double *y, size_t n);
@@ -14,7 +16,7 @@ void f1(double *x, double *y, size_t n);
 void generate_jacobian_t(void(*func)(double*, double*, size_t), double *x,
                          double *matrix, double *temp, size_t n, double delta);
 
-void find_root(void (*func)(double*, double*, size_t), double *x0,
+int find_root(void (*func)(double*, double*, size_t), double *x0,
                             double *matrix, double *x, size_t n);
 
 double norm2(double const *x, size_t n);
@@ -47,17 +49,22 @@ double norm2(double const *x, size_t n)
     return sqrt(result);
 }
 
-void find_root(void (*func)(double*, double*, size_t), double *x0,
+int find_root(void (*func)(double*, double*, size_t), double *x0,
                double *matrix, double *x, size_t n)
 {
+    double h_norm = 0.0;
     do {
         generate_jacobian_t(func, x0, matrix, x, n, 1e-4); // XXX
         func(x0, x, n);
         for (size_t i = 0; i < n; i++) x[i] = -x[i];
         solve_system(matrix, x, n);
+        h_norm = norm2(x, n);
+        if (h_norm > DANGEROUS_UPPER_BOUND)
+            return 1;
         for (size_t i = 0; i < n; i++) x0[i] += x[i];
         func(x0, x, n);
     } while (norm2(x, n) > EPS);
+    return 0;
 }
 
 // Sample functions
@@ -126,7 +133,11 @@ int main(int argc, char **argv)
         if ((fscanf(in, "%lf", x0 + i)) != 1)
             return 4;
 
-    find_root(f1, x0, matrix, x, n);
+    if (find_root(f1, x0, matrix, x, n)) {
+        fprintf(stderr, "Divergence\n");
+        return 5;
+    }
+
 
     for (size_t i = 0; i < n; i++)
         printf("%lf ", x0[i]);
