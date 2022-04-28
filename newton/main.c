@@ -51,7 +51,7 @@ void find_root(void (*func)(double*, double*, size_t), double *x0,
     do {
         generate_jacobian_t(func, x0, matrix, x, n, 1e-6); // XXX
         func(x0, x, n);
-        for (int i = 0; i < n; i++) x[i] = -x[i];
+        for (size_t i = 0; i < n; i++) x[i] = -x[i];
         solve_system(matrix, x, n);
         h_norm = norm2(x, n);
         for (size_t i = 0; i < n; i++) x0[i] += x[i];
@@ -81,6 +81,8 @@ int main(int argc, char **argv)
     size_t n;
     double *matrix, *x, *x0;
     FILE *in;
+
+    if (argc != 2) return 2;
     
     n = 10;
 
