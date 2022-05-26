@@ -32,10 +32,6 @@ int main(int argc, char **argv)
     if (!points)
         return 1;
 
-    lists = (adj_list_t*)malloc(n * sizeof(adj_list_t));
-    if (!lists)
-        return 1;
-
     in = fopen(argv[1], "r");
     if (!in)
         return 1;

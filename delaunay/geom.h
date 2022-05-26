@@ -1,6 +1,8 @@
 #ifndef GEOM_H
 #define GEOM_H
 
+#define SQR(x) ((x) * (x))
+
 #define EPS 1e-16
 
 struct point;
@@ -17,6 +19,7 @@ struct point {
     double x;
     double y;
     node_t *head;
+#define SQRNORM(x) (SQR(h->x) + SQR(h->y))
 };
 
 struct node {   // Weird double linked list
